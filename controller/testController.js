@@ -8,21 +8,41 @@ let responseObject = {
     result: ""
 }
 
-router.get("/getData",  (req, res) => {
-    let result = req.query.key1 * req.query.key2;
-    res.send({ result: result })
+router.get("/getBMI",  (req, res) => {
+    let result = Number(req.query.weight/(( req.query.hight/100)* req.query.hight/100));
+    let msg = "";
+    if(result>25){
+        msg = "Fat"
+    }
+    else if(result==25) {
+        msg = "Normal"
+    }
+    else if(result<25){
+        msg = "Thin"
+    }
+    res.send({ BMI: result.toFixed(2),status:msg
+        
+     })
 });
 /*
 Request
+key
 * */
+//if (value) value ='',value=null , value=nuderfined return false
 router.post("/postData",async  (req, res) => {
-    if(!req.body.key5){
+    responseObject = {
+        msg: "",
+        result: ""
+    }
+    if(!req.body.key){
         responseObject.msg = "Bad request";
+        res.send({msg : responseObject.msg});
     }else{
         responseObject.msg = "success";
         responseObject.result = req.body.key * 5;
-    }
-    res.send(responseObject);
+        res.send(responseObject);
+}
+    
 });
 
 module.exports = router;
